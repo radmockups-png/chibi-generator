@@ -7,18 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{--bg:#0f172a;--panel:#111827;--ink:#e5e7eb;--muted:#9ca3af;--accent:#60a5fa}
-  *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui;-apple-system,Segoe UI,Roboto;background:linear-gradient(180deg,#0b1220,#0f172a 60%);color:var(--ink)}
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;background:linear-gradient(180deg,#0b1220,#0f172a 60%);color:var(--ink)}
   header{padding:28px 16px;text-align:center}
   h1{margin:6px 0 0;font-size:26px}
-  main{max-width:900px;margin:0 auto;padding:0 12px 40px}
+  main{max-width:980px;margin:0 auto;padding:0 12px 44px}
   .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:16px;margin-bottom:14px}
   label{display:block;font-size:12px;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
   select,button{width:100%;padding:12px;border-radius:10px;border:1px solid #273244;background:#0b1220;color:#e5e7eb;outline:none}
   select:focus{border-color:var(--accent)}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(min-width:920px){.row.three{grid-template-columns:1fr 1fr 1fr}}
   .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  button{cursor:pointer} .primary{background:#2563eb;border:0}
-  .prompt{min-height:180px;padding:14px;background:#0b1220;border:1px dashed #2a3344;border-radius:12px;white-space:pre-wrap;line-height:1.5}
+  button{cursor:pointer;transition:transform .04s} button:active{transform:translateY(1px)}
+  .primary{background:#2563eb;border:0;font-weight:700}
+  .generate{background:linear-gradient(90deg,#2563eb,#22d3ee);border:0;font-weight:800}
+  .prompt{min-height:240px;padding:14px;background:#0b1220;border:1px dashed #2a3344;border-radius:12px;white-space:pre-wrap;line-height:1.6}
   .pill{display:inline-block;padding:6px 10px;border:1px solid #2a3344;border-radius:999px;font-size:12px;color:#a5b4fc}
   .note{font-size:12px;color:#9ca3af;margin-top:6px}
 </style>
@@ -27,7 +30,7 @@
 <header>
   <div class="pill">by YourBrand</div>
   <h1>Male Chibi Generator</h1>
-  <p class="note">Pick options → prompt updates live → copy to your AI app.</p>
+  <p class="note">Choose everything you want, then hit <b>Generate Prompt</b>. Copy to Ideogram/MJ/Kittl AI.</p>
 </header>
 
 <main>
@@ -51,13 +54,13 @@
       <div>
         <label for="skin">Skin tone</label>
         <select id="skin">
-          <option>light</option><option>tan</option><option selected>brown</option><option>dark brown</option>
+          <option>light</option><option>tan</option><option selected>brown</option><option>dark brown</option><option>reddish-brown</option>
         </select>
       </div>
       <div>
         <label for="hair">Hair</label>
         <select id="hair">
-          <option>short fade</option><option selected>twists/locs</option><option>curly high-top</option><option>waves with part</option>
+          <option>short fade</option><option selected>twists/locs</option><option>curly high-top</option><option>waves with part</option><option>braids</option>
         </select>
       </div>
     </div>
@@ -66,7 +69,7 @@
       <div>
         <label for="outfit">Outfit</label>
         <select id="outfit">
-          <option selected>hoodie + cargos</option><option>streetwear set</option><option>tracksuit</option><option>school uniform</option>
+          <option selected>hoodie + cargos</option><option>streetwear set</option><option>tracksuit</option><option>school uniform</option><option>techwear</option>
         </select>
       </div>
       <div>
@@ -81,79 +84,135 @@
       <div>
         <label for="pose">Pose</label>
         <select id="pose">
-          <option selected>hands in pockets, mischievous smirk</option><option>peace sign, wink</option><option>cross-armed, confident</option>
+          <option selected>hands in pockets, mischievous smirk</option><option>peace sign, wink</option><option>cross-armed, confident</option><option>skateboard stance</option>
         </select>
       </div>
       <div>
         <label for="bg">Background</label>
         <select id="bg">
-          <option selected>clear plain background</option><option>urban street dusk</option><option>studio gradient</option>
+          <option selected>clear plain background</option><option>urban street dusk</option><option>school hallway</option><option>studio gradient</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- NEW CONTROLS -->
+    <div class="row" style="margin-top:10px">
+      <div>
+        <label for="expression">Expression / Mood</label>
+        <select id="expression">
+          <option selected>confident with a playful smirk</option>
+          <option>mischievous, raised brow and half-smile</option>
+          <option>friendly, bright smile</option>
+          <option>focused and determined</option>
+          <option>cool and aloof</option>
+        </select>
+      </div>
+      <div>
+        <label for="lighting">Lighting</label>
+        <select id="lighting">
+          <option selected>soft studio lighting with gentle rim light</option>
+          <option>dramatic three-point lighting with crisp key light</option>
+          <option>glossy high-key fashion lighting</option>
+          <option>moody low key with soft bounce</option>
+          <option>golden-hour warm light</option>
         </select>
       </div>
     </div>
 
     <div class="row" style="margin-top:10px">
       <div>
-        <label for="extras">Accessories</label>
-        <select id="extras">
-          <option selected>gold chain + watch</option><option>backpack</option><option>ear studs</option><option>none</option>
+        <label for="camera">Camera Angle</label>
+        <select id="camera">
+          <option selected>eye-level, straight-on framing</option>
+          <option>slight low angle hero shot</option>
+          <option>slight high angle cute-look</option>
+          <option>three-quarter view</option>
         </select>
       </div>
       <div>
-        <label for="quality">Quality</label>
-        <select id="quality">
-          <option selected>ultra high detail, glossy shading, soft rim light</option>
-          <option>flat cel shading, bold lines</option><option>matte painterly</option>
+        <label for="palette">Color Palette</label>
+        <select id="palette">
+          <option selected>balanced vibrant palette with clean neutrals</option>
+          <option>neon accents on muted base</option>
+          <option>warm oranges and browns with teal pops</option>
+          <option>cool blues and purples with white highlights</option>
+          <option>monochrome greyscale with selective color on sneakers</option>
         </select>
       </div>
     </div>
 
-    <div class="actions">
+    <div class="actions" style="margin-top:12px">
+      <button class="generate" id="generate">⚡ Generate Prompt</button>
+      <button id="copy" class="primary">📋 Copy</button>
+      <button id="share">🔗 Share</button>
       <button id="randomize">🎲 Randomize</button>
       <button id="clear">🧹 Clear</button>
-      <button class="primary" id="copy">📋 Copy Prompt</button>
-      <button id="share">🔗 Share Link</button>
     </div>
-    <p class="note">If you still don’t see the prompt box below, your paste got truncated—repeat this replace step.</p>
+    <p class="note">Nothing updates until you press <b>Generate</b>. Then copy or share.</p>
   </section>
 
   <section class="card">
     <label>Your Character Prompt</label>
-    <div id="prompt" class="prompt">Make a selection to generate your prompt…</div>
+    <div id="prompt" class="prompt">Set your options and press “Generate Prompt”.</div>
   </section>
 </main>
 
 <script>
-  const F = ["style","age","skin","hair","outfit","shoes","pose","bg","extras","quality"];
-  const els = Object.fromEntries(F.map(id=>[id,document.getElementById(id)]));
+  // Fields (including the new ones)
+  const F = ["style","age","skin","hair","outfit","shoes","pose","bg","expression","lighting","camera","palette"];
+
+  // Paragraph template
+  const PROMPT_TEMPLATE = (s) => 
+`Create a ${s.style.toLowerCase()} male chibi character shown as a ${s.age}. He has ${s.skin} skin and ${s.hair}, with classic chibi proportions—oversized head, large glossy eyes, compact body, and simplified hands and feet. Dress him in ${s.outfit} paired with ${s.shoes}; include neat stitching, fabric texture, and clean seams. Accessories are subtle so the silhouette stays readable.
+
+Pose him ${s.pose} with an expression that is ${s.expression}. Frame the character with ${s.camera}. Use ${s.lighting}. Place him against a ${s.bg}, keeping the background uncluttered so he remains the clear focal point.
+
+Render with ${s.palette} and professional finish: tidy outlines, even cel shading with controlled gradients, bright specular highlights on hair and sneakers, and gentle ambient occlusion where forms meet (chin to hoodie, cuffs, shoe soles). Maintain a centered composition with comfortable headroom and equal side margins. Avoid text, logos, or watermark. Export as a 300 DPI, print-ready PNG with clean anti-aliased edges.`;
+
+  // Grab elements
+  const els = Object.fromEntries(F.map(id => [id, document.getElementById(id)]));
   const promptEl = document.getElementById("prompt");
 
-  const T = s => `${s.style} male chibi character, ${s.age}. ${s.skin} skin, ${s.hair}. Outfit: ${s.outfit} with ${s.shoes}, ${s.extras}. ${s.pose}.
-Clean ${s.bg}. ${s.quality}.
-Centered composition, crisp linework, vibrant colors, 300 DPI, print-ready PNG, no text.`;
+  function state(){ return Object.fromEntries(F.map(f => [f, els[f].value])); }
 
-  function state(){ return Object.fromEntries(F.map(f=>[f,els[f].value])); }
-  function render(){
+  // Generate on click
+  document.getElementById("generate").addEventListener("click", () => {
     const s = state();
-    promptEl.textContent = T(s);
-    const params = new URLSearchParams(); F.forEach(f=>params.set(f,els[f].value));
+    promptEl.textContent = PROMPT_TEMPLATE(s);
+    // update URL for sharing the chosen options
+    const params = new URLSearchParams(); F.forEach(f => params.set(f, els[f].value));
     history.replaceState(null,"","?"+params.toString());
-  }
-  F.forEach(f=>els[f].addEventListener("change",render));
+  });
 
-  document.getElementById("copy").addEventListener("click",async()=>{
+  // Copy / Share / Randomize / Clear
+  document.getElementById("copy").addEventListener("click", async () => {
     try{ await navigator.clipboard.writeText(promptEl.textContent.trim()); alert("Prompt copied!"); }
     catch{ alert("Copy failed—long-press and copy manually."); }
   });
-  document.getElementById("clear").addEventListener("click",()=>{ F.forEach(f=>els[f].selectedIndex=0); render(); });
-  document.getElementById("randomize").addEventListener("click",()=>{ F.forEach(f=>els[f].selectedIndex=Math.floor(Math.random()*els[f].length)); render(); });
-  document.getElementById("share").addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(location.href); alert("Sharable link copied!"); }catch{} });
 
-  // Load from URL params
-  (function(){
-    const p=new URLSearchParams(location.search);
-    F.forEach(f=>{ if(p.has(f)){ [...els[f].options].forEach((o,i)=>{ if(o.value===p.get(f)) els[f].selectedIndex=i; }); }});
-    render();
+  document.getElementById("share").addEventListener("click", async () => {
+    try{ await navigator.clipboard.writeText(location.href); alert("Sharable link copied!"); }
+    catch{ alert("Copy failed—copy from address bar."); }
+  });
+
+  document.getElementById("randomize").addEventListener("click", () => {
+    F.forEach(f => els[f].selectedIndex = Math.floor(Math.random()*els[f].length));
+  });
+
+  document.getElementById("clear").addEventListener("click", () => {
+    F.forEach(f => els[f].selectedIndex = 0);
+    promptEl.textContent = "Set your options and press “Generate Prompt”.";
+    history.replaceState(null,""," ");
+  });
+
+  // If a shared link includes options, prefill (but still require Generate)
+  (function initFromURL(){
+    const p = new URLSearchParams(location.search);
+    F.forEach(f=>{
+      if(p.has(f)){
+        [...els[f].options].forEach((o,i)=>{ if(o.value===p.get(f)) els[f].selectedIndex=i; });
+      }
+    });
   })();
 </script>
 </body>
