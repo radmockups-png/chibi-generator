@@ -287,7 +287,6 @@
     Object.keys(els).forEach(id=>{if(els[id].tagName==="SELECT"){els[id].selectedIndex=0;}else{els[id].value="";}});
     document.getElementById("prompt").textContent="Choose options and press “Generate Prompt”.";
   });
-
   // Presets
   document.getElementById("preset-zeke").addEventListener("click",()=>{
     els.gender.value="male";
