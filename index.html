@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login – Chibi Generator</title>
+<style>
+  :root{--bg:#14081f;--panel:#1c0f2a;--ink:#f4eaff;--muted:#c9a7f5;--accent:#7c3aed}
+  *{box-sizing:border-box} body{margin:0;height:100svh;display:grid;place-items:center;background:linear-gradient(180deg,#10061a,#14081f 60%);font-family:system-ui,Inter,Segoe UI,Roboto;color:var(--ink)}
+  .box{width:min(420px,92vw);background:var(--panel);padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  h1{margin:0 0 6px} p{margin:0 0 16px;color:var(--muted);font-size:14px}
+  input{width:100%;padding:12px;border-radius:10px;border:1px solid #2b2740;background:#0b0f17;color:var(--ink);margin:8px 0}
+  .row{display:flex;align-items:center;gap:8px;margin-top:6px}
+  button{width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:linear-gradient(90deg,#7c3aed,#db2777);color:#fff;font-weight:700;cursor:pointer}
+  .err{color:#ff7b7b;min-height:20px;margin-top:8px}
+  small{color:#8f7ad6}
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>Protected</h1>
+    <p>Enter the credentials to continue.</p>
+
+    <input id="user" autocomplete="username" placeholder="Username">
+    <input id="pw" type="password" autocomplete="current-password" placeholder="Password">
+
+    <div class="row">
+      <input type="checkbox" id="remember" style="width:auto">
+      <label for="remember"><small>Remember for 12 hours</small></label>
+    </div>
+
+    <button id="go">Unlock</button>
+    <div class="err" id="err"></div>
+  </div>
+
+<script>
+  // ====== CONFIG ======
+  const USERNAME = "";  // change if you want username too
+  const PASS_SHA256_HEX = "cab6fe960050f1a3d6435db61dfc26fea844a72be8955f6c38ef20b87e9e0f48"; // <-- paste the hex hash here
+  const DEST = "app.html";           // where to go after login
+  const REMEMBER_HOURS = 12;         // remember-me duration
+  const MAX_ATTEMPTS = 5;            // then lock for LOCK_MIN minutes
+  const LOCK_MIN = 5;
+
+  // ====== simple session store ======
+  const S_KEY = "gate_ok_until";
+  const A_KEY = "gate_attempts";
+  const L_KEY = "gate_locked_until";
+
+  // auto-open if remembered
+  (function autoOpen(){
+    const until = +localStorage.getItem(S_KEY) || 0;
+    if (Date.now() < until) location.replace(DEST);
+  })();
+
+  function fmtMin(ms){ return Math.ceil(ms/60000); }
+
+  async function sha256Hex(str){
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+
+  function setRemember(){
+    if (!document.getElementById("remember").checked) return;
+    const until = Date.now() + REMEMBER_HOURS*60*60*1000;
+    localStorage.setItem(S_KEY, String(until));
+  }
+
+  function incAttempts(){
+    const now = Date.now();
+    const lockedUntil = +localStorage.getItem(L_KEY) || 0;
+    if (now < lockedUntil) return {locked:true, left:lockedUntil-now};
+
+    let n = +(localStorage.getItem(A_KEY) || 0) + 1;
+    if (n >= MAX_ATTEMPTS){
+      localStorage.setItem(L_KEY, String(now + LOCK_MIN*60*1000));
+      localStorage.removeItem(A_KEY);
+      return {locked:true, left:LOCK_MIN*60*1000};
+    }
+    localStorage.setItem(A_KEY, String(n));
+    return {locked:false};
+  }
+
+  async function login(){
+    const now = Date.now();
+    const lockedUntil = +localStorage.getItem(L_KEY) || 0;
+    if (now < lockedUntil){
+      showErr(`Locked. Try again in ${fmtMin(lockedUntil-now)} min.`);
+      return;
+    }
+
+    const u = document.getElementById("user").value.trim();
+    const p = document.getElementById("pw").value;
+
+    if (USERNAME && u !== USERNAME){
+      const r = incAttempts();
+      if (r.locked) return showErr(`Locked. Try again in ${fmtMin(r.left)} min.`);
+      return showErr("Invalid username or password.");
+    }
+
+    const hash = await sha256Hex(p);
+    if (hash === PASS_SHA256_HEX){
+      localStorage.removeItem(A_KEY);
+      localStorage.removeItem(L_KEY);
+      setRemember();
+      location.replace(DEST);
+    } else {
+      const r = incAttempts();
+      if (r.locked) return showErr(`Locked. Try again in ${fmtMin(r.left)} min.`);
+      showErr("Invalid username or password.");
+    }
+  }
+
+  function showErr(msg){ document.getElementById("err").textContent = msg; }
+
+  document.getElementById("go").addEventListener("click", login);
+  document.getElementById("pw").addEventListener("keydown", e => { if (e.key === "Enter") login(); });
+</script>
+</body>
+</html>
+
