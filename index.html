@@ -13,14 +13,16 @@
   main{max-width:980px;margin:0 auto;padding:0 12px 44px}
   .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:16px;margin-bottom:14px}
   label{display:block;font-size:12px;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
-  select,button{width:100%;padding:12px;border-radius:10px;border:1px solid #273244;background:#0b1220;color:#e5e7eb;outline:none}
-  select:focus{border-color:var(--accent)}
+  select,button,input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #273244;background:#0b1220;color:#e5e7eb;outline:none}
+  select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+  textarea{min-height:70px;resize:vertical}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  @media(min-width:920px){.row.three{grid-template-columns:1fr 1fr 1fr}}
   .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   button{cursor:pointer;transition:transform .04s} button:active{transform:translateY(1px)}
   .primary{background:#2563eb;border:0;font-weight:700}
   .generate{background:linear-gradient(90deg,#2563eb,#22d3ee);border:0;font-weight:800}
+  .preset{background:#0ea5e9;border:0;font-weight:700}
+  .download{background:#10b981;border:0;font-weight:700}
   .prompt{min-height:240px;padding:14px;background:#0b1220;border:1px dashed #2a3344;border-radius:12px;white-space:pre-wrap;line-height:1.6}
   .pill{display:inline-block;padding:6px 10px;border:1px solid #2a3344;border-radius:999px;font-size:12px;color:#a5b4fc}
   .note{font-size:12px;color:#9ca3af;margin-top:6px}
@@ -30,22 +32,41 @@
 <header>
   <div class="pill">by YourBrand</div>
   <h1>Male Chibi Generator</h1>
-  <p class="note">Choose everything you want, then hit <b>Generate Prompt</b>. Copy to Ideogram/MJ/Kittl AI.</p>
+  <p class="note">Type extras / negatives (optional) → choose options (leave any blank) → use a preset if you like → press <b>Generate Prompt</b>.</p>
 </header>
 
 <main>
   <section class="card">
+    <!-- PRESETS -->
+    <div class="actions" style="margin-bottom:8px">
+      <button class="preset" id="preset-zeke">⭐ Zeke Trouble preset</button>
+      <!-- Add more preset buttons here -->
+    </div>
+
+    <!-- FREE TEXT -->
+    <div style="margin-bottom:12px">
+      <label for="custom">Extra Prompt Text (optional)</label>
+      <textarea id="custom" placeholder="e.g., Halloween theme, cyberpunk poster, graffiti vibe"></textarea>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <label for="negative">Negative Prompt (optional)</label>
+      <textarea id="negative" placeholder="e.g., blurry, watermark, extra fingers, low-res, text, logo"></textarea>
+    </div>
+
     <div class="row">
       <div>
         <label for="style">Style</label>
         <select id="style">
+          <option value="">— optional —</option>
           <option>Chibi</option><option>Bratz-inspired</option><option>Cartoon-realistic</option><option>Anime super-cute</option>
         </select>
       </div>
       <div>
         <label for="age">Age</label>
         <select id="age">
-          <option>child</option><option>teen</option><option selected>young adult</option>
+          <option value="">— optional —</option>
+          <option>child</option><option>teen</option><option>young adult</option>
         </select>
       </div>
     </div>
@@ -54,13 +75,15 @@
       <div>
         <label for="skin">Skin tone</label>
         <select id="skin">
-          <option>light</option><option>tan</option><option selected>brown</option><option>dark brown</option><option>reddish-brown</option>
+          <option value="">— optional —</option>
+          <option>light</option><option>tan</option><option>brown</option><option>dark brown</option><option>reddish-brown</option>
         </select>
       </div>
       <div>
         <label for="hair">Hair</label>
         <select id="hair">
-          <option>short fade</option><option selected>twists/locs</option><option>curly high-top</option><option>waves with part</option><option>braids</option>
+          <option value="">— optional —</option>
+          <option>short fade</option><option>twists/locs</option><option>curly high-top</option><option>waves with part</option><option>braids</option>
         </select>
       </div>
     </div>
@@ -69,13 +92,15 @@
       <div>
         <label for="outfit">Outfit</label>
         <select id="outfit">
-          <option selected>hoodie + cargos</option><option>streetwear set</option><option>tracksuit</option><option>school uniform</option><option>techwear</option>
+          <option value="">— optional —</option>
+          <option>hoodie + cargos</option><option>streetwear set</option><option>tracksuit</option><option>school uniform</option><option>techwear</option>
         </select>
       </div>
       <div>
         <label for="shoes">Shoes</label>
         <select id="shoes">
-          <option selected>LV trainers</option><option>Jordan 4</option><option>Air Force 1</option><option>Converse high-tops</option>
+          <option value="">— optional —</option>
+          <option>LV trainers</option><option>Jordan 4</option><option>Air Force 1</option><option>Converse high-tops</option>
         </select>
       </div>
     </div>
@@ -84,23 +109,25 @@
       <div>
         <label for="pose">Pose</label>
         <select id="pose">
-          <option selected>hands in pockets, mischievous smirk</option><option>peace sign, wink</option><option>cross-armed, confident</option><option>skateboard stance</option>
+          <option value="">— optional —</option>
+          <option>hands in pockets, mischievous smirk</option><option>peace sign, wink</option><option>cross-armed, confident</option><option>skateboard stance</option>
         </select>
       </div>
       <div>
         <label for="bg">Background</label>
         <select id="bg">
-          <option selected>clear plain background</option><option>urban street dusk</option><option>school hallway</option><option>studio gradient</option>
+          <option value="">— optional —</option>
+          <option>clear plain background</option><option>urban street dusk</option><option>school hallway</option><option>studio gradient</option>
         </select>
       </div>
     </div>
 
-    <!-- NEW CONTROLS -->
     <div class="row" style="margin-top:10px">
       <div>
         <label for="expression">Expression / Mood</label>
         <select id="expression">
-          <option selected>confident with a playful smirk</option>
+          <option value="">— optional —</option>
+          <option>confident with a playful smirk</option>
           <option>mischievous, raised brow and half-smile</option>
           <option>friendly, bright smile</option>
           <option>focused and determined</option>
@@ -110,7 +137,8 @@
       <div>
         <label for="lighting">Lighting</label>
         <select id="lighting">
-          <option selected>soft studio lighting with gentle rim light</option>
+          <option value="">— optional —</option>
+          <option>soft studio lighting with gentle rim light</option>
           <option>dramatic three-point lighting with crisp key light</option>
           <option>glossy high-key fashion lighting</option>
           <option>moody low key with soft bounce</option>
@@ -123,7 +151,8 @@
       <div>
         <label for="camera">Camera Angle</label>
         <select id="camera">
-          <option selected>eye-level, straight-on framing</option>
+          <option value="">— optional —</option>
+          <option>eye-level, straight-on framing</option>
           <option>slight low angle hero shot</option>
           <option>slight high angle cute-look</option>
           <option>three-quarter view</option>
@@ -132,7 +161,8 @@
       <div>
         <label for="palette">Color Palette</label>
         <select id="palette">
-          <option selected>balanced vibrant palette with clean neutrals</option>
+          <option value="">— optional —</option>
+          <option>balanced vibrant palette with clean neutrals</option>
           <option>neon accents on muted base</option>
           <option>warm oranges and browns with teal pops</option>
           <option>cool blues and purples with white highlights</option>
@@ -144,76 +174,170 @@
     <div class="actions" style="margin-top:12px">
       <button class="generate" id="generate">⚡ Generate Prompt</button>
       <button id="copy" class="primary">📋 Copy</button>
+      <button id="download" class="download">⬇️ Download .txt</button>
       <button id="share">🔗 Share</button>
       <button id="randomize">🎲 Randomize</button>
       <button id="clear">🧹 Clear</button>
     </div>
-    <p class="note">Nothing updates until you press <b>Generate</b>. Then copy or share.</p>
+    <p class="note">Leave anything blank—those parts will be skipped in the paragraph. Negatives appear as a separate line.</p>
   </section>
 
   <section class="card">
     <label>Your Character Prompt</label>
-    <div id="prompt" class="prompt">Set your options and press “Generate Prompt”.</div>
+    <div id="prompt" class="prompt">Type extras/negatives (optional), choose options, then press “Generate Prompt”.</div>
   </section>
 </main>
 
 <script>
-  // Fields (including the new ones)
-  const F = ["style","age","skin","hair","outfit","shoes","pose","bg","expression","lighting","camera","palette"];
+  const joinS = (...parts) => parts.filter(Boolean).join(" ");
 
-  // Paragraph template
-  const PROMPT_TEMPLATE = (s) => 
-`Create a ${s.style.toLowerCase()} male chibi character shown as a ${s.age}. He has ${s.skin} skin and ${s.hair}, with classic chibi proportions—oversized head, large glossy eyes, compact body, and simplified hands and feet. Dress him in ${s.outfit} paired with ${s.shoes}; include neat stitching, fabric texture, and clean seams. Accessories are subtle so the silhouette stays readable.
-
-Pose him ${s.pose} with an expression that is ${s.expression}. Frame the character with ${s.camera}. Use ${s.lighting}. Place him against a ${s.bg}, keeping the background uncluttered so he remains the clear focal point.
-
-Render with ${s.palette} and professional finish: tidy outlines, even cel shading with controlled gradients, bright specular highlights on hair and sneakers, and gentle ambient occlusion where forms meet (chin to hoodie, cuffs, shoe soles). Maintain a centered composition with comfortable headroom and equal side margins. Avoid text, logos, or watermark. Export as a 300 DPI, print-ready PNG with clean anti-aliased edges.`;
-
-  // Grab elements
+  // All fields including negatives
+  const F = ["custom","negative","style","age","skin","hair","outfit","shoes","pose","bg","expression","lighting","camera","palette"];
   const els = Object.fromEntries(F.map(id => [id, document.getElementById(id)]));
-  const promptEl = document.getElementById("prompt");
 
-  function state(){ return Object.fromEntries(F.map(f => [f, els[f].value])); }
+  function buildParagraph(s){
+    const lead = s.custom ? s.custom.trim().replace(/\.*\s*$/,".") : "";
+    const who  = joinS(
+      "Create",
+      s.style ? `a ${s.style.toLowerCase()} male chibi character` : "a male chibi character",
+      s.age ? `depicted as a ${s.age}.` : "."
+    ).replace(/\s\./g,".");
 
-  // Generate on click
+    const look = joinS(
+      s.skin ? `He has ${s.skin} skin` : "",
+      s.hair ? `and ${s.hair}` : ""
+    );
+    const lookLine = look ? look + ", with classic chibi proportions—oversized head, large glossy eyes, compact body, and simplified hands and feet." : 
+                           "Use classic chibi proportions—oversized head, large glossy eyes, compact body, and simplified hands and feet.";
+
+    const wear = joinS(
+      (s.outfit || s.shoes) ? "Dress him in" : "",
+      s.outfit ? s.outfit : "",
+      (s.outfit && s.shoes) ? "paired with" : "",
+      (!s.outfit && s.shoes) ? s.shoes : (s.shoes ? s.shoes : "")
+    );
+    const wearLine = wear ? wear + "; include neat stitching, fabric texture, and clean seams." : "";
+
+    const mood = joinS(
+      s.pose ? `Pose him ${s.pose}` : "",
+      s.expression ? `with an expression that is ${s.expression}` : ""
+    );
+    const moodLine = mood ? mood + "." : "";
+
+    const framing = joinS(
+      s.camera ? `Frame with ${s.camera}.` : "",
+      s.lighting ? `Use ${s.lighting}.` : "",
+      s.bg ? `Place him against a ${s.bg}, keeping the background uncluttered.` : ""
+    );
+
+    const finish = joinS(
+      s.palette ? `Render with ${s.palette}` : "Render with balanced, vibrant colors",
+      "and a professional finish: tidy outlines, even cel shading with controlled gradients, bright specular highlights on hair and sneakers, and gentle ambient occlusion where forms meet."
+    );
+
+    const output = "Maintain a centered composition with comfortable headroom and equal side margins. Avoid text, logos, or watermark. Export as a 300 DPI, print-ready PNG with clean anti-aliased edges.";
+
+    const negatives = s.negative ? `\n\nNegative prompt: ${s.negative}` : "";
+
+    return [lead, who, lookLine, wearLine, moodLine, framing, finish, output].filter(Boolean).join("\n\n") + negatives;
+  }
+
+  function state(){ return Object.fromEntries(F.map(f => [f, (els[f].value || "").trim()])); }
+
+  // --- PRESETS ---
+  function applyPreset(p){
+    Object.entries(p).forEach(([id,val])=>{
+      if(!(id in els)) return;
+      if(els[id].tagName==="SELECT"){
+        const opts = [...els[id].options];
+        const idx = opts.findIndex(o=>o.value===val);
+        els[id].selectedIndex = idx >= 0 ? idx : 0;
+      } else {
+        els[id].value = val;
+      }
+    });
+  }
+
+  // Zeke Trouble preset (based on your character notes)
+  const ZEKE_PRESET = {
+    custom: "Keep proportions cute but slightly athletic. Add tiny 2cm scar on left cheek. Maintain neat twisted locks and streetwear vibe.",
+    style:"Bratz-inspired",
+    age:"young adult",
+    skin:"reddish-brown",
+    hair:"twists/locs",
+    outfit:"streetwear set",
+    shoes:"LV trainers",
+    pose:"hands in pockets, mischievous smirk",
+    bg:"clear plain background",
+    expression:"mischievous, raised brow and half-smile",
+    lighting:"soft studio lighting with gentle rim light",
+    camera:"eye-level, straight-on framing",
+    palette:"balanced vibrant palette with clean neutrals",
+    negative:"blurry, watermark, extra fingers, duplicated limbs, text, logo"
+  };
+
+  document.getElementById("preset-zeke").addEventListener("click", ()=>applyPreset(ZEKE_PRESET));
+
+  // --- Generate ---
   document.getElementById("generate").addEventListener("click", () => {
     const s = state();
-    promptEl.textContent = PROMPT_TEMPLATE(s);
-    // update URL for sharing the chosen options
-    const params = new URLSearchParams(); F.forEach(f => params.set(f, els[f].value));
+    document.getElementById("prompt").textContent = buildParagraph(s);
+    const params = new URLSearchParams(); Object.entries(s).forEach(([k,v])=> v && params.set(k,v));
     history.replaceState(null,"","?"+params.toString());
   });
 
-  // Copy / Share / Randomize / Clear
+  // --- Copy ---
   document.getElementById("copy").addEventListener("click", async () => {
-    try{ await navigator.clipboard.writeText(promptEl.textContent.trim()); alert("Prompt copied!"); }
+    try{ await navigator.clipboard.writeText(document.getElementById("prompt").textContent.trim()); alert("Prompt copied!"); }
     catch{ alert("Copy failed—long-press and copy manually."); }
   });
 
+  // --- Download .txt ---
+  document.getElementById("download").addEventListener("click", () => {
+    const text = document.getElementById("prompt").textContent.trim() || "Generate a prompt first.";
+    const blob = new Blob([text], {type:"text/plain"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "prompt.txt";
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // --- Share ---
   document.getElementById("share").addEventListener("click", async () => {
     try{ await navigator.clipboard.writeText(location.href); alert("Sharable link copied!"); }
     catch{ alert("Copy failed—copy from address bar."); }
   });
 
+  // --- Randomize ---
   document.getElementById("randomize").addEventListener("click", () => {
-    F.forEach(f => els[f].selectedIndex = Math.floor(Math.random()*els[f].length));
+    ["style","age","skin","hair","outfit","shoes","pose","bg","expression","lighting","camera","palette"].forEach(id=>{
+      const el = els[id]; el.selectedIndex = Math.floor(Math.random()*el.options.length);
+    });
   });
 
+  // --- Clear ---
   document.getElementById("clear").addEventListener("click", () => {
-    F.forEach(f => els[f].selectedIndex = 0);
-    promptEl.textContent = "Set your options and press “Generate Prompt”.";
+    Object.keys(els).forEach(id => {
+      if(els[id].tagName==="SELECT"){ els[id].selectedIndex = 0; } else { els[id].value = ""; }
+    });
+    document.getElementById("prompt").textContent = "Type extras/negatives (optional), choose options, then press “Generate Prompt”.";
     history.replaceState(null,""," ");
   });
 
-  // If a shared link includes options, prefill (but still require Generate)
+  // Prefill from URL if present
   (function initFromURL(){
     const p = new URLSearchParams(location.search);
-    F.forEach(f=>{
-      if(p.has(f)){
-        [...els[f].options].forEach((o,i)=>{ if(o.value===p.get(f)) els[f].selectedIndex=i; });
+    Object.keys(els).forEach(id=>{
+      if(!p.has(id)) return;
+      if(els[id].tagName==="SELECT"){
+        [...els[id].options].forEach((o,i)=>{ if(o.value===p.get(id)) els[id].selectedIndex=i; });
+      } else {
+        els[id].value = p.get(id);
       }
     });
   })();
 </script>
 </body>
 </html>
+
