@@ -6,14 +6,9 @@
 <title>Chibi Character Generator</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#14081f;
-    --panel:#1c0f2a;
-    --ink:#f4eaff;
-    --muted:#c9a7f5;
-    --accent:#a78bfa;
-  }
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;background:linear-gradient(180deg,#10061a,#14081f 60%);color:var(--ink)}
+  :root{--bg:#14081f;--panel:#1c0f2a;--ink:#f4eaff;--muted:#c9a7f5;--accent:#a78bfa}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto;background:linear-gradient(180deg,#10061a,#14081f 60%);color:var(--ink)}
   header{padding:28px 16px;text-align:center}
   h1{margin:6px 0 0;font-size:26px}
   main{max-width:980px;margin:0 auto;padding:0 12px 44px}
@@ -32,12 +27,12 @@
   .prompt{min-height:260px;padding:14px;background:#0b0f17;border:1px dashed #2a3344;border-radius:12px;white-space:pre-wrap;line-height:1.6}
   .pill{display:inline-block;padding:6px 10px;border:1px solid #2a3344;border-radius:999px;font-size:12px;color:#a5b4fc}
   .note{font-size:12px;color:var(--muted);margin-top:6px}
-
   /* Lightbox */
-  #lightbox{display:none;position:fixed;z-index:1000;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);align-items:center;justify-content:center;flex-direction:column}
-  #lightbox img{max-width:90%;max-height:80%;border-radius:14px;box-shadow:0 0 25px rgba(0,0,0,0.6)}
+  #lightbox{display:none;position:fixed;z-index:1000;inset:0;background:rgba(0,0,0,.9);align-items:center;justify-content:center;flex-direction:column}
+  #lightbox img{max-width:90%;max-height:80%;border-radius:14px;box-shadow:0 0 25px rgba(0,0,0,.6)}
   .lightbox-controls{margin-top:10px;display:flex;gap:10px}
   .lightbox-btn{background:#7c3aed;color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:16px}
+  @media (max-width:720px){.row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -49,13 +44,13 @@
 
 <main>
   <section class="card">
-    <!-- PRESETS -->
+    <!-- Presets -->
     <div class="actions" style="margin-bottom:8px">
       <button class="preset" id="preset-zeke">⭐ Zeke Trouble (Male)</button>
       <button class="preset" id="preset-honey">⭐ Honey (Female)</button>
     </div>
 
-    <!-- TEXT FIELDS -->
+    <!-- Extra / Negative -->
     <div style="margin-bottom:12px">
       <label for="custom">Extra Prompt Text (optional)</label>
       <textarea id="custom" placeholder="e.g., Halloween theme, cyberpunk poster, graffiti vibe"></textarea>
@@ -65,7 +60,7 @@
       <textarea id="negative" placeholder="e.g., blurry, watermark, extra fingers, low-res, text, logo"></textarea>
     </div>
 
-    <!-- TYPE & STYLE -->
+    <!-- Type & Style -->
     <div class="row" style="margin-bottom:12px">
       <div>
         <label for="gender">Character Type</label>
@@ -80,25 +75,19 @@
       </div>
     </div>
 
-    <!-- AGE & SKIN -->
+    <!-- Age & Skin -->
     <div class="row">
       <div>
         <label for="age">Age</label>
-        <select id="age">
-          <option value="">— optional —</option>
-          <option>child</option><option>teen</option><option>young adult</option>
-        </select>
+        <select id="age"><option value="">— optional —</option><option>child</option><option>teen</option><option>young adult</option></select>
       </div>
       <div>
         <label for="skin">Skin tone</label>
-        <select id="skin">
-          <option value="">— optional —</option>
-          <option>light</option><option>tan</option><option>brown</option><option>dark brown</option><option>reddish-brown</option>
-        </select>
+        <select id="skin"><option value="">— optional —</option><option>light</option><option>tan</option><option>brown</option><option>dark brown</option><option>reddish-brown</option></select>
       </div>
     </div>
 
-    <!-- HAIR & OUTFIT -->
+    <!-- Hair & Outfit -->
     <div class="row" style="margin-top:10px">
       <div>
         <label for="hair">Hair</label>
@@ -108,8 +97,7 @@
           <option>waves with part</option><option>side part with fade</option>
           <option>afro</option><option>curly high-top</option><option>spiky anime style</option>
           <option>cornrows</option><option>braids</option><option>twists/locs</option><option>dreads (long)</option>
-          <option>long straight hair</option><option>long wavy hair</option><option>ponytail</option>
-          <option>space buns</option><option>bob cut</option>
+          <option>long straight hair</option><option>long wavy hair</option><option>ponytail</option><option>space buns</option><option>bob cut</option>
         </select>
       </div>
       <div>
@@ -124,30 +112,28 @@
       </div>
     </div>
 
-    <!-- SHOES & POSE -->
+    <!-- Shoes & Pose -->
     <div class="row" style="margin-top:10px">
       <div>
         <label for="shoes">Shoes</label>
         <select id="shoes">
           <option value="">— optional —</option>
-          <option>LV trainers</option><option>Jordan 4</option><option>Air Force 1</option>
-          <option>Nike Dunks</option><option>Yeezy Boost</option><option>Adidas Superstars</option>
-          <option>Puma Suede</option><option>Timberland boots</option><option>Converse high-tops</option>
-          <option>heels</option><option>platform boots</option><option>ballet flats</option>
+          <option>LV trainers</option><option>Jordan 4</option><option>Air Force 1</option><option>Nike Dunks</option>
+          <option>Yeezy Boost</option><option>Adidas Superstars</option><option>Puma Suede</option>
+          <option>Timberland boots</option><option>Converse high-tops</option><option>heels</option><option>platform boots</option><option>ballet flats</option>
         </select>
       </div>
       <div>
         <label for="pose">Pose</label>
         <select id="pose">
           <option value="">— optional —</option>
-          <option>hands in pockets, mischievous smirk</option><option>peace sign, wink</option>
-          <option>cross-armed, confident</option><option>skateboard stance</option>
-          <option>one hand on hip, tilted head</option><option>holding a coffee</option><option>reading a book</option>
+          <option>hands in pockets, mischievous smirk</option><option>peace sign, wink</option><option>cross-armed, confident</option>
+          <option>skateboard stance</option><option>one hand on hip, tilted head</option><option>holding a coffee</option><option>reading a book</option>
         </select>
       </div>
     </div>
 
-    <!-- Expression, Lighting, Camera, Palette -->
+    <!-- Expression & Lighting -->
     <div class="row" style="margin-top:10px">
       <div>
         <label for="expression">Expression / Mood</label>
@@ -170,6 +156,7 @@
       </div>
     </div>
 
+    <!-- Camera & Palette -->
     <div class="row" style="margin-top:10px">
       <div>
         <label for="camera">Camera Angle</label>
@@ -206,8 +193,7 @@
     <div id="prompt" class="prompt">Choose options and press “Generate Prompt”.</div>
   </section>
 
-  
-  <!-- Gallery Section -->
+  <!-- Optional Gallery (upload these images to the repo root for previews) -->
   <section class="card">
     <h2 style="margin-bottom:12px">✨ Sample Characters</h2>
     <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;">
@@ -228,7 +214,7 @@
         <p style="margin-top:6px;font-size:14px;">Kate</p>
       </div>
     </div>
-    <p class="note" style="margin-top:12px;">(Upload <code>zeke.png</code>, <code>honey.png</code>, <code>milo.png</code>, <code>kate.png</code> to your repo)</p>
+    <p class="note" style="margin-top:12px;">(Upload <code>zeke.png</code>, <code>honey.png</code>, <code>milo.png</code>, <code>kate.png</code> to your repo root if you want these to show.)</p>
   </section>
 </main>
 
@@ -258,88 +244,45 @@
     const moodLine = mood ? mood+"." : "";
     const framing = joinS(s.camera?`Camera angle: ${s.camera}.`:"", s.lighting?`Lighting: ${s.lighting}.`:"");
     const finish = joinS(s.palette?`Color scheme: ${s.palette}.`:"", "Render with clean outlines, polished shading, glossy highlights, and professional finish.");
-    const output = "Keep a centered composition with equal margins. Avoid logos, text, or watermarks. Final output should be 300 DPI, print-ready PNG.";
+    const output = "Keep a centered composition with equal margins. Avoid logos, text, or watermarks. Final output: 300 DPI, print-ready PNG.";
     const negatives = s.negative ? `\n\nNegative prompt: ${s.negative}` : "";
     return [lead,who,lookLine,wearLine,moodLine,framing,finish,output].filter(Boolean).join("\n\n")+negatives;
   }
+  const state = () => Object.fromEntries(F.map(f => [f,(els[f]?.value||"").trim()]));
 
-  function state(){return Object.fromEntries(F.map(f=>([f,(els[f].value||"").trim()])))}
+  document.getElementById("generate").addEventListener("click",()=>{document.getElementById("prompt").textContent=buildParagraph(state());});
+  document.getElementById("copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(document.getElementById("prompt").textContent.trim());alert("Prompt copied!");}catch{}});
+  document.getElementById("download").addEventListener("click",()=>{const txt=document.getElementById("prompt").textContent.trim()||"Generate a prompt first.";const blob=new Blob([txt],{type:"text/plain"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="prompt.txt";a.click();URL.revokeObjectURL(url);});
+  document.getElementById("share").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(location.href);alert("Sharable link copied!");}catch{}});
+  document.getElementById("randomize").addEventListener("click",()=>{["age","skin","hair","outfit","shoes","pose","expression","lighting","camera","palette"].forEach(id=>{const el=els[id];if(el) el.selectedIndex=Math.floor(Math.random()*el.options.length);});});
+  document.getElementById("clear").addEventListener("click",()=>{Object.keys(els).forEach(id=>{const el=els[id];if(!el) return; if(el.tagName==="SELECT"){el.selectedIndex=0;}else{el.value="";}});document.getElementById("prompt").textContent="Choose options and press “Generate Prompt”.";
+  });
 
-  document.getElementById("generate").addEventListener("click",()=>{
-    const s=state();
-    document.getElementById("prompt").textContent=buildParagraph(s);
-  });
-  document.getElementById("copy").addEventListener("click",async()=>{
-    try{await navigator.clipboard.writeText(document.getElementById("prompt").textContent.trim());alert("Prompt copied!");}catch{}
-  });
-  document.getElementById("download").addEventListener("click",()=>{
-    const txt=document.getElementById("prompt").textContent.trim()||"Generate a prompt first.";const blob=new Blob([txt],{type:"text/plain"});
-    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="prompt.txt";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-  });
-  document.getElementById("share").addEventListener("click",async()=>{
-    try{await navigator.clipboard.writeText(location.href);alert("Sharable link copied!");}catch{}
-  });
-  document.getElementById("randomize").addEventListener("click",()=>{
-    ["age","skin","hair","outfit","shoes","pose","expression","lighting","camera","palette"].forEach(id=>{
-      const el=els[id];el.selectedIndex=Math.floor(Math.random()*el.options.length);
-    });
-  });
-  document.getElementById("clear").addEventListener("click",()=>{
-    Object.keys(els).forEach(id=>{if(els[id].tagName==="SELECT"){els[id].selectedIndex=0;}else{els[id].value="";}});
-    document.getElementById("prompt").textContent="Choose options and press “Generate Prompt”.";
-  });
   // Presets
   document.getElementById("preset-zeke").addEventListener("click",()=>{
-    els.gender.value="male";
-    els.custom.value="Add scar on left cheek, mischievous energy, streetwear vibe.";
-    els.age.value="young adult";els.skin.value="reddish-brown";els.hair.value="twists/locs";els.outfit.value="streetwear set";
-    els.shoes.value="LV trainers";els.pose.value="hands in pockets, mischievous smirk";els.expression.value="mischievous, raised brow and half-smile";
-    els.lighting.value="soft studio lighting with gentle rim light";els.camera.value="eye-level, straight-on framing";els.palette.value="balanced vibrant palette with clean neutrals";
+    els.gender.value="male"; els.custom.value="Add scar on left cheek, mischievous energy, streetwear vibe.";
+    els.age.value="young adult"; els.skin.value="reddish-brown"; els.hair.value="twists/locs"; els.outfit.value="tracksuit"; els.shoes.value="LV trainers";
+    els.pose.value="hands in pockets, mischievous smirk"; els.expression.value="mischievous, raised brow and half-smile";
+    els.lighting.value="soft studio lighting with gentle rim light"; els.camera.value="eye-level, straight-on framing"; els.palette.value="balanced vibrant palette with clean neutrals";
     els.negative.value="blurry, watermark, extra fingers, duplicated limbs, text, logo";
   });
   document.getElementById("preset-honey").addEventListener("click",()=>{
-    els.gender.value="female";
-    els.custom.value="Stylish younger sister vibe, Bratz-inspired, always with iced coffee.";
-    els.age.value="teen";els.skin.value="brown";els.hair.value="long straight hair";els.outfit.value="school uniform";
-    els.shoes.value="platform boots";els.pose.value="holding a coffee";els.expression.value="confident with a playful smirk";
-    els.lighting.value="glossy high-key fashion lighting";els.camera.value="three-quarter view";els.palette.value="warm oranges and browns with teal pops";
+    els.gender.value="female"; els.custom.value="Stylish younger sister vibe, Bratz-inspired, always with iced coffee.";
+    els.age.value="teen"; els.skin.value="brown"; els.hair.value="long straight hair"; els.outfit.value="school uniform"; els.shoes.value="platform boots";
+    els.pose.value="holding a coffee"; els.expression.value="confident with a playful smirk";
+    els.lighting.value="glossy high-key fashion lighting"; els.camera.value="three-quarter view"; els.palette.value="warm oranges and browns with teal pops";
     els.negative.value="blurry, watermark, extra fingers, duplicated limbs, text, logo";
   });
 
-  // --- Gallery Lightbox with arrows ---
-  const thumbs = Array.from(document.querySelectorAll(".gallery-img"));
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
-  const prevBtn = document.getElementById("prev");
-  const nextBtn = document.getElementById("next");
-  const closeBtn = document.getElementById("close");
-  let idx = 0;
-
-  function openLightbox(i){
-    idx = i;
-    lightboxImg.src = thumbs[idx].src + "?v=" + Date.now(); // cache-bust
-    lightboxImg.alt = thumbs[idx].alt;
-    lightbox.style.display = "flex";
-  }
-  function closeLightbox(){ lightbox.style.display = "none"; }
-  function nav(delta){
-    if(!thumbs.length) return;
-    idx = (idx + delta + thumbs.length) % thumbs.length;
-    lightboxImg.src = thumbs[idx].src + "?v=" + Date.now();
-    lightboxImg.alt = thumbs[idx].alt;
-  }
-
-  thumbs.forEach((img,i)=> img.addEventListener("click", ()=> openLightbox(i)));
-  prevBtn.addEventListener("click", ()=> nav(-1));
-  nextBtn.addEventListener("click", ()=> nav(1));
-  closeBtn.addEventListener("click", closeLightbox);
-  lightbox.addEventListener("click", (e)=> { if(e.target===lightbox) closeLightbox(); });
-  window.addEventListener("keydown", (e)=>{
-    if(lightbox.style.display!=="flex") return;
-    if(e.key==="Escape") closeLightbox();
-    if(e.key==="ArrowLeft") nav(-1);
-    if(e.key==="ArrowRight") nav(1);
-  });
+  // Gallery lightbox
+  const thumbs=[...document.querySelectorAll(".gallery-img")]; const lb=document.getElementById("lightbox"); const lbImg=document.getElementById("lightbox-img");
+  let i=0; const openLB=k=>{i=k; lbImg.src=thumbs[i].src; lb.style.display="flex"}; const closeLB=()=>lb.style.display="none"; const nav=d=>{i=(i+d+thumbs.length)%thumbs.length; lbImg.src=thumbs[i].src};
+  thumbs.forEach((img,k)=>img.addEventListener("click",()=>openLB(k)));
+  document.getElementById("prev").addEventListener("click",()=>nav(-1));
+  document.getElementById("next").addEventListener("click",()=>nav(1));
+  document.getElementById("close").addEventListener("click",closeLB);
+  lb.addEventListener("click",(e)=>{if(e.target===lb) closeLB();});
+  window.addEventListener("keydown",(e)=>{if(lb.style.display!=="flex") return; if(e.key==="Escape") closeLB(); if(e.key==="ArrowLeft") nav(-1); if(e.key==="ArrowRight") nav(1);});
 </script>
 </body>
 </html>
